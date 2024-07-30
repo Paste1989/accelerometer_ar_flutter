@@ -3,9 +3,9 @@ import 'package:arkit_plugin/arkit_plugin.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
 
 class ARKitImageRecognitionPage extends StatefulWidget {
-  final ValueNotifier<double> distance;
+  final Function(double) onDistanceChange;
 
-  ARKitImageRecognitionPage({required this.distance});
+  ARKitImageRecognitionPage({required this.onDistanceChange});
 
   @override
   _ARKitImageRecognitionPageState createState() => _ARKitImageRecognitionPageState();
@@ -60,9 +60,9 @@ class _ARKitImageRecognitionPageState extends State<ARKitImageRecognitionPage> {
       anchor.transform.getColumn(3).z,
     );
     final distance = position.length;
+    widget.onDistanceChange(distance);
 
     // Update the distance notifier
-    widget.distance.value = distance;
 
     // Create a node for the detected image
     imageNode = ARKitNode(
@@ -92,7 +92,7 @@ class _ARKitImageRecognitionPageState extends State<ARKitImageRecognitionPage> {
     final distance = position.length;
 
     // Update the distance notifier
-    widget.distance.value = distance;
+    widget.onDistanceChange(distance);
 
     // Update the node's position
     if (imageNode != null) {
@@ -102,7 +102,7 @@ class _ARKitImageRecognitionPageState extends State<ARKitImageRecognitionPage> {
 
   void _removeImageAnchor() {
     // Reset the distance notifier
-    widget.distance.value = 0.0;
+    
 
     // Remove the node
     if (imageNode != null) {
